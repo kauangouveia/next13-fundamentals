@@ -30,8 +30,15 @@ export async function GET(request: Request) {
 
     const data = await response.json();
     return new Response(JSON.stringify(data), { status: 200 });
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
+  } catch (error: unknown) {
+    // Verifica se o erro é uma instância de Error
+    if (error instanceof Error) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 500,
+      });
+    }
+    // Caso o erro não seja do tipo Error, retorna uma mensagem genérica
+    return new Response(JSON.stringify({ error: "Unknown error occurred" }), {
       status: 500,
     });
   }

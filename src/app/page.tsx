@@ -6,12 +6,28 @@ import { Skeleton } from "@nextui-org/skeleton"
 import Image from 'next/image'
 import { FormEvent, useState } from 'react'
 
+interface Claim {
+  titulo: string;
+  data: string;
+  noticia: string;
+  link: string;
+  texto: string;
+}
+
+interface ImageType {
+  id: number;
+  src: {
+    medium: string;
+  };
+  alt: string;
+}
+
 export default function Home() {
-  const [query, setQuery] = useState('')
-  const [results, setResults] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<Claim[]>([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [images, setImages] = useState<any[]>([]);
+  const [images, setImages] = useState<ImageType[]>([]);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,11 +48,12 @@ export default function Home() {
         setImages([]); // Se não houver imagens, define um array vazio
       }
     } catch (error) {
-      setError(error.message);
+      setError((error as Error).message);
     } finally {
       setLoading(false);
     }
   };
+
   const handleSearchNews = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -65,7 +82,6 @@ export default function Home() {
         };
       });
 
-      console.log(formattedResults);
       setResults(formattedResults);
     } catch (error) {
       console.log(error);
@@ -196,20 +212,21 @@ export default function Home() {
               }
               {loading ? <Skeleton className="flex rounded-lg w-full h-4" /> :
                 <span className="flex gap-2 items-baseline">
-                  <h2 className="font-bold text-lg whitespace-nowrap">Noticia checada:</h2>
-                  <p className="text-base">{claim.titulo}</p>
-                </span>
-              }
-              {loading ? <Skeleton className="flex rounded-lg w-full  h-20" /> :
-                <span className="flex gap-2 items-baseline">
-                  <h2 className="font-bold text-lg whitespace-nowrap">Data da noticia:</h2>
+                  <h2 className="font-bold text-lg whitespace-nowrap">Data:</h2>
                   <p className="text-base">{claim.data}</p>
                 </span>
               }
-              {loading ? <Skeleton className="flex rounded-lg w-full h-40" /> :
+              {loading ? <Skeleton className="flex rounded-lg w-full h-4" /> :
                 <span className="flex gap-2 items-baseline">
                   <h2 className="font-bold text-lg whitespace-nowrap">Link:</h2>
-                  <p className="text-base">{claim.link}</p>
+                  <a
+                    href={claim.link}
+                    target="_blank"
+                    className="text-[#224D78] text-base hover:underline"
+                    rel="noreferrer"
+                  >
+                    {claim.link}
+                  </a>
                 </span>
               }
             </div>
