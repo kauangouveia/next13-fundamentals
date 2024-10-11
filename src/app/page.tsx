@@ -2,7 +2,7 @@
 
 import newspaperImage from '@/assets/newspaper.png'
 import searchIcon from '@/assets/search.png'
-import { Skeleton } from "@nextui-org/skeleton"
+import { Skeleton } from '@nextui-org/skeleton'
 import Image from 'next/image'
 import { FormEvent, useState } from 'react'
 
